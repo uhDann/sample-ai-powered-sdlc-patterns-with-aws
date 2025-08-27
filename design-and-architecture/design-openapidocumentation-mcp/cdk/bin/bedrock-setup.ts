@@ -37,8 +37,6 @@ const lambdaStack = new LambdaStack(app, 'LambdaAPIStack', {
     account: process.env.CDK_DEFAULT_ACCOUNT,
     region: process.env.CDK_DEFAULT_REGION || 'us-east-1'
   },
-  bedrockAgentId: bedrockStack.agentId,
-  bedrockAgentAliasId: process.env.BEDROCK_AGENT_ALIAS_ID || 'TSTALIASID', // Default test alias ID
   knowledgeBaseId: bedrockStack.knowledgeBaseId
 });
 

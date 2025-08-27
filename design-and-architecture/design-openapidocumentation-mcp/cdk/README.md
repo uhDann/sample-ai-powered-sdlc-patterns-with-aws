@@ -39,10 +39,13 @@ The CDK stacks now support configuration through environment variables instead o
 - `CDK_IAM_USER_ARN`: IAM user ARN for OpenSearch access (optional, defaults to account root)
 
 #### Bedrock Configuration
-- `BEDROCK_REGION`: Region for Bedrock services (default: eu-west-1)
-- `BEDROCK_FOUNDATION_MODEL`: Foundation model ID (default: eu.anthropic.claude-3-7-sonnet-20250219-v1:0)
+- `BEDROCK_REGION`: Region for Bedrock services (default: us-east-1)
+- `BEDROCK_FOUNDATION_MODEL`: Foundation model ID (default: us.anthropic.claude-3-7-sonnet-20250219-v1:0)
 - `BEDROCK_EMBEDDING_MODEL_ARN`: Embedding model ARN for knowledge base
-- `BEDROCK_AGENT_ALIAS_ID`: Agent alias ID (default: TSTALIASID)
+
+- `MODEL_ID`: Model ID for Lambda functions (default: us.anthropic.claude-3-7-sonnet-20250219-v1:0)
+
+> **Important**: The `MODEL_ID` should match your `BEDROCK_REGION`. Use `us.anthropic.claude-3-7-sonnet-20250219-v1:0` for US regions or `eu.anthropic.claude-3-7-sonnet-20250219-v1:0` for EU regions.
 
 #### MCP Server Configuration
 - `NODE_ENV`: Node.js environment (default: production)

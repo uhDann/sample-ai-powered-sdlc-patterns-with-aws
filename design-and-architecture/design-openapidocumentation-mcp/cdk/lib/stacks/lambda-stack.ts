@@ -5,8 +5,6 @@ import { Construct } from 'constructs';
 import { NagSuppressions } from 'cdk-nag';
 
 export interface LambdaStackProps extends cdk.StackProps {
-  bedrockAgentId?: string;
-  bedrockAgentAliasId?: string;
   knowledgeBaseId?: string;
 }
 
@@ -36,21 +34,7 @@ export class LambdaStack extends cdk.Stack {
       ]
     }));
 
-    // Add Bedrock agent permissions if agent is configured
-    if (props.bedrockAgentId && props.bedrockAgentAliasId) {
-      domainAnalyzerRole.addToPolicy(new iam.PolicyStatement({
-        effect: iam.Effect.ALLOW,
-        actions: [
-          'bedrock:InvokeAgent',
-          'bedrock:GetAgent',
-          'bedrock:GetAgentAlias'
-        ],
-        resources: [
-          `arn:aws:bedrock:${this.region}:${this.account}:agent/${props.bedrockAgentId}`,
-          `arn:aws:bedrock:${this.region}:${this.account}:agent-alias/${props.bedrockAgentId}/${props.bedrockAgentAliasId}`
-        ]
-      }));
-    }
+    // Bedrock agent permissions removed - Lambda functions now use direct model invocation
 
     // Add separate policy for model invocation with specific model
     domainAnalyzerRole.addToPolicy(new iam.PolicyStatement({
@@ -87,9 +71,7 @@ export class LambdaStack extends cdk.Stack {
       memorySize: 1024,
       environment: {
         BEDROCK_REGION: process.env.BEDROCK_REGION || this.region,
-        MODEL_ID: process.env.MODEL_ID || 'anthropic.claude-3-7-sonnet-20250219-v1:0',
-        ...(props.bedrockAgentId && { BEDROCK_AGENT_ID: props.bedrockAgentId }),
-        ...(props.bedrockAgentAliasId && { BEDROCK_AGENT_ALIAS_ID: props.bedrockAgentAliasId }),
+        MODEL_ID: process.env.MODEL_ID || 'us.anthropic.claude-3-7-sonnet-20250219-v1:0',
         AUTH_REQUIRED: 'false' // Disable authentication for internal calls
       },
       description: 'Lambda function for domain model analysis using Bedrock Claude 3.7 Sonnet'
@@ -152,7 +134,7 @@ export class LambdaStack extends cdk.Stack {
       memorySize: 1024,
       environment: {
         BEDROCK_REGION: process.env.BEDROCK_REGION || this.region,
-        MODEL_ID: process.env.MODEL_ID || 'anthropic.claude-3-7-sonnet-20250219-v1:0',
+        MODEL_ID: process.env.MODEL_ID || 'us.anthropic.claude-3-7-sonnet-20250219-v1:0',
         AUTH_REQUIRED: 'false' // Disable authentication for internal calls
       },
       description: 'Lambda function for API documentation generation using Bedrock Claude 3.7 Sonnet'
